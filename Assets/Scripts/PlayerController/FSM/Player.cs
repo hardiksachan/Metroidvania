@@ -16,8 +16,11 @@ public class Player : MonoBehaviour
     
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
+    public Player_JumpState JumpState { get; private set; }
+    public Player_InAirState InAirState { get; private set; }
+    public Player_LandState LandState { get; private set; }
 
-    [SerializeField] private PlayerData _playerData;
+    [SerializeField] private PlayerData playerData;
 
     #endregion
 
@@ -46,8 +49,11 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         StateMachine = new StateMachine();
-        IdleState = new Player_IdleState(StateMachine, "idle", this, _playerData);
-        MoveState = new Player_MoveState(StateMachine, "move", this, _playerData);
+        IdleState = new Player_IdleState(StateMachine, "idle", this, playerData);
+        MoveState = new Player_MoveState(StateMachine, "move", this, playerData);
+        JumpState = new Player_JumpState(StateMachine, "inAir", this, playerData);
+        InAirState = new Player_InAirState(StateMachine, "inAir", this, playerData);
+        LandState = new Player_LandState(StateMachine, "land", this, playerData);
     }
 
     void Start()
@@ -63,6 +69,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        CurrentVelocity = Rb.velocity;
         StateMachine.CurrentState.LogicUpdate();
     }
 
@@ -78,6 +85,13 @@ public class Player : MonoBehaviour
     public void SetVelocityX(float velocity)
     {
         _workspace.Set(velocity, CurrentVelocity.y);
+        Rb.velocity = _workspace;
+        CurrentVelocity = _workspace;
+    }
+    
+    public void SetVelocityY(float velocity)
+    {
+        _workspace.Set(CurrentVelocity.x, velocity);
         Rb.velocity = _workspace;
         CurrentVelocity = _workspace;
     }
@@ -108,7 +122,7 @@ public class Player : MonoBehaviour
 
     public bool CheckIfGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, _playerData.groundCheckRadius, _playerData.whatIsGround);
+        return Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
     }
     
     public void CheckIfShouldFlip(int xInput)

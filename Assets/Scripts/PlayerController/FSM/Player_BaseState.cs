@@ -1,5 +1,6 @@
 ﻿using FiniteStateMachine;
 using PlayerController.Data;
+using UnityEngine;
 
 namespace PlayerController.FSM
 {
@@ -13,11 +14,11 @@ namespace PlayerController.FSM
 
         private string _animBoolName;
 
-        public Player_BaseState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerPlayerData) : base(stateMachine)
+        public Player_BaseState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine)
         {
             _animBoolName = animBoolName;
             this.player = player;
-            PlayerData = playerPlayerData;
+            PlayerData = playerData;
         }
 
         public override void Enter()
@@ -26,6 +27,8 @@ namespace PlayerController.FSM
 
             IsAnimationFinished = false;
             player.Anim.SetBool(_animBoolName, true);
+            
+            Debug.Log(_animBoolName);
             
             DoChecks();
         }

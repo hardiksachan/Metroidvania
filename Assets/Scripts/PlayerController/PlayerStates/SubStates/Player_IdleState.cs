@@ -1,11 +1,12 @@
 ﻿using FiniteStateMachine;
 using PlayerController.Data;
+using PlayerController.PlayerStates.SuperStates;
 
 namespace PlayerController.PlayerStates.SubStates
 {
     public class Player_IdleState : Player_GroundedState
     {
-        public Player_IdleState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerPlayerData) : base(stateMachine, animBoolName, player, playerPlayerData)
+        public Player_IdleState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
         }
 
