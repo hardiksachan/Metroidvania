@@ -14,12 +14,15 @@ namespace PlayerController.PlayerStates.SubStates
         {
             base.Enter();
             player.SetVelocityX(0f);
+
+            if (isOnSlope) {
+                player.Rb.sharedMaterial = PlayerData.fullFrictionMat;
+            }
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
             if (InputX != 0 && !isExitingState)
             {
                 stateMachine.ChangeState(player.MoveState);
@@ -34,6 +37,8 @@ namespace PlayerController.PlayerStates.SubStates
         public override void Exit()
         {
             base.Exit();
+            
+            player.Rb.sharedMaterial = PlayerData.noFrictionMat;
         }
 
         public override void DoChecks()

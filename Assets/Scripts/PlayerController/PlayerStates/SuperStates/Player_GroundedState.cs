@@ -1,12 +1,17 @@
-﻿using FiniteStateMachine;
+﻿using System;
+using FiniteStateMachine;
 using PlayerController.Data;
 using PlayerController.FSM;
+using UnityEngine;
 
 namespace PlayerController.PlayerStates.SuperStates
 {
     public class Player_GroundedState : Player_BaseState
     {
         protected int InputX;
+
+        protected bool isOnSlope;
+        protected Vector2 slopeDir;
 
         private bool _jumpInput;
         private bool _grabInput;
@@ -56,6 +61,18 @@ namespace PlayerController.PlayerStates.SuperStates
             base.DoChecks();
 
             _isGrounded = player.CheckIfGrounded();
+            slopeDir = player.CheckSlope();
+
+            isOnSlope = (slopeDir.sqrMagnitude > 0) && (Math.Abs(Vector2.Dot(slopeDir, Vector2.up)) > .1f);
+
+            if (isOnSlope)
+            {
+                GameObject.Find("IsOnSlope").GetComponent<SpriteRenderer>().color = Color.green;
+            }
+            else
+            {
+                GameObject.Find("IsOnSlope").GetComponent<SpriteRenderer>().color = Color.red;
+            }
         }
     }
 }
