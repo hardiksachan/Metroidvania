@@ -13,6 +13,10 @@ namespace PlayerController.Data
         public float slopeCheckDistance = .5f;
         public PhysicsMaterial2D noFrictionMat;
         public PhysicsMaterial2D fullFrictionMat;
+        
+        [Header("Crouch State")]
+        public float crouchMovementSpeed = 8f;
+        public float crouchColliderScale = .5f;
 
         [Header("Jump State")]
         public float variableJumpHeightMultiplier = .5f;

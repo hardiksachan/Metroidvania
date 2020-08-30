@@ -21,14 +21,29 @@ namespace PlayerController.PlayerStates.SubStates
             base.LogicUpdate();
 
             if (isExitingState) return;
-            
+
             player.CheckIfShouldFlip(InputX);
-            
+
             player.SetVelocityX(InputX * PlayerData.movementSpeed);
-            
-            if (InputX == 0)
+
+            if (CrouchInput)
             {
-                stateMachine.ChangeState(player.IdleState);
+                player.SetColliderScale(true);
+                if (InputX == 0)
+                {
+                    stateMachine.ChangeState(player.CrouchIdleState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(player.CrouchMoveState);
+                }
+            }
+            else
+            {
+                if (InputX == 0)
+                {
+                    stateMachine.ChangeState(player.IdleState);
+                }
             }
         }
 

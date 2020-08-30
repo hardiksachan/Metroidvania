@@ -14,6 +14,8 @@ namespace PlayerController.FSM
 
         public Player_IdleState IdleState { get; private set; }
         public Player_MoveState MoveState { get; private set; }
+        public Player_CrouchIdleState CrouchIdleState { get; private set; }
+        public Player_CrouchMoveState CrouchMoveState { get; private set; }
         public Player_SlopeIdleState SlopeIdleState { get; private set; }
         public Player_SlopeMoveState SlopeMoveState { get; private set; }
         public Player_JumpState JumpState { get; private set; }
@@ -29,6 +31,7 @@ namespace PlayerController.FSM
         public Animator Anim { get; private set; }
         public PlayerInputHandler InputHandler { get; private set; }
         public Rigidbody2D Rb { get; private set; }
+        public CapsuleCollider2D Collider { get; private set; }
 
         #endregion
 
@@ -56,7 +59,8 @@ namespace PlayerController.FSM
         public int FacingDirection { get; private set; }
 
         private Vector2 _workspace;
-        private Vector2 _capsuleColliderSize;
+        private Vector2 _colliderInitialSize;
+        private Vector2 _colliderInitialOffset;
 
         #endregion
 
@@ -67,6 +71,8 @@ namespace PlayerController.FSM
             StateMachine = new StateMachine();
             IdleState = new Player_IdleState(StateMachine, "idle", this, playerData);
             MoveState = new Player_MoveState(StateMachine, "move", this, playerData);
+            CrouchIdleState = new Player_CrouchIdleState(StateMachine, "crouchIdle", this, playerData);
+            CrouchMoveState = new Player_CrouchMoveState(StateMachine, "crouchMove", this, playerData);
             SlopeIdleState = new Player_SlopeIdleState(StateMachine, "idle", this, playerData);
             SlopeMoveState = new Player_SlopeMoveState(StateMachine, "move", this, playerData);
             JumpState = new Player_JumpState(StateMachine, "inAir", this, playerData);
@@ -80,7 +86,9 @@ namespace PlayerController.FSM
             Rb = GetComponent<Rigidbody2D>();
             Anim = GetComponent<Animator>();
 
-            _capsuleColliderSize = GetComponent<CapsuleCollider2D>().size;
+            Collider = GetComponent<CapsuleCollider2D>();
+            _colliderInitialSize = Collider.size;
+            _colliderInitialOffset = Collider.offset;
 
             StateMachine.Initialize(IdleState);
 
@@ -122,6 +130,25 @@ namespace PlayerController.FSM
             _workspace.Set(angle.x * velocity * direction, angle.y * velocity);
             Rb.velocity = _workspace;
             CurrentVelocity = _workspace;
+        }
+
+        public void SetColliderScale(bool crouched)
+        {
+            if (crouched)
+            {
+                var size = new Vector2();
+                size.Set(_colliderInitialSize.x, _colliderInitialSize.y*playerData.crouchColliderScale);
+                Collider.size = size;
+                
+                var offset = new Vector2();
+                offset.Set(_colliderInitialOffset.x, _colliderInitialOffset.y-((_colliderInitialSize.y - size.y)/2));
+                Collider.offset = offset;
+            }
+            else
+            {
+                Collider.size = _colliderInitialSize;
+                Collider.offset = _colliderInitialOffset;
+            }
         }
 
 
@@ -166,7 +193,7 @@ namespace PlayerController.FSM
 
         public void CheckSlope()
         {
-            Vector2 checkPos = transform.position - (Vector3) (new Vector2(0.0f, _capsuleColliderSize.y / 2 * transform.localScale.y));
+            Vector2 checkPos = transform.position - (Vector3) (new Vector2(0.0f, _colliderInitialSize.y / 2 * transform.localScale.y));
 
             // Check Horizontal 
             RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, playerData.slopeCheckDistance,

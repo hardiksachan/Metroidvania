@@ -8,6 +8,8 @@ namespace PlayerController.PlayerStates.SuperStates
     {
         protected int InputX;
 
+        protected bool CrouchInput;
+        
         private bool _jumpInput;
         private bool _grabInput;
         private bool _isGrounded;
@@ -31,6 +33,7 @@ namespace PlayerController.PlayerStates.SuperStates
 
             InputX = player.InputHandler.NormInputX;
             _jumpInput = player.InputHandler.JumpInput;
+            CrouchInput = player.InputHandler.CrouchInput;
 
             if (_jumpInput && player.JumpState.CanJump())
             {

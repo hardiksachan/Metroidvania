@@ -11,7 +11,8 @@ namespace PlayerController.Input
         public int NormInputY { get; private set; }
         public bool JumpInput { get; private set; }
         public bool JumpInputStop { get; private set; }
-        
+        public bool CrouchInput { get; private set; }
+
         [SerializeField]
         private float inputHoldTime = 0.2f;
 
@@ -60,6 +61,12 @@ namespace PlayerController.Input
             {
                 JumpInputStop = true;
             }
+        }
+
+        public void OnCrouchInput(InputAction.CallbackContext context)
+        {
+            if (context.started) CrouchInput = true;
+            if (context.canceled) CrouchInput = false;
         }
         
         public void UseJumpInput() => JumpInput = false;

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300b611d6c24356469fa344a629bd178, type: 3}
   m_Name: newPlayerData
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  groundCheckRadius: 0.8
+  movementSpeed: 12
+  groundCheckRadius: 1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  slopeCheckDistance: 0.5
+  slopeCheckDistance: 1.6
   noFrictionMat: {fileID: 6200000, guid: eb3e40deb5cfee94c872a5f544c11d97, type: 2}
   fullFrictionMat: {fileID: 6200000, guid: ca4ded58919b6b44a989ef3ab498faaa, type: 2}
   variableJumpHeightMultiplier: 0.5

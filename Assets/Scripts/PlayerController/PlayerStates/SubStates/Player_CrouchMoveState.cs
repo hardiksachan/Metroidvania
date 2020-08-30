@@ -2,41 +2,46 @@
 using PlayerController.Data;
 using PlayerController.FSM;
 using PlayerController.PlayerStates.SuperStates;
+using UnityEngine;
 
 namespace PlayerController.PlayerStates.SubStates
 {
-    public class Player_IdleState : Player_GroundedState
+    public class Player_CrouchMoveState : Player_GroundedState
     {
-        public Player_IdleState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
+        public Player_CrouchMoveState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
-            player.SetVelocityX(0f);
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+            
             if (isExitingState) return;
+            
+            player.CheckIfShouldFlip(InputX);
+            
+            player.SetVelocityX(InputX * PlayerData.crouchMovementSpeed);
 
             if (CrouchInput)
             {
-                player.SetColliderScale(true);
                 if (InputX == 0)
                 {
                     stateMachine.ChangeState(player.CrouchIdleState);
                 }
-                else
-                {
-                    stateMachine.ChangeState(player.CrouchMoveState);
-                }
             }
             else
             {
-                if (InputX != 0)
+                player.SetColliderScale(false);
+                if (InputX == 0)
+                {
+                    stateMachine.ChangeState(player.IdleState);
+                }
+                else
                 {
                     stateMachine.ChangeState(player.MoveState);
                 }
@@ -56,6 +61,8 @@ namespace PlayerController.PlayerStates.SubStates
         public override void DoChecks()
         {
             base.DoChecks();
+            
+            
         }
     }
 }
