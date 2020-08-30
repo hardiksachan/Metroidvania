@@ -12,6 +12,7 @@ namespace PlayerController.PlayerStates.SuperStates
         private bool _grabInput;
         private bool _isGrounded;
         private bool _isTouchingWall;
+        private bool _isOnSlope;
     
         public Player_GroundedState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
@@ -34,10 +35,22 @@ namespace PlayerController.PlayerStates.SuperStates
             if (_jumpInput && player.JumpState.CanJump())
             {
                 stateMachine.ChangeState(player.JumpState);
-            } else if (!_isGrounded)
+            } 
+            else if (!_isGrounded)
             {
                 player.InAirState.StartCoyoteTime();
                 stateMachine.ChangeState(player.InAirState);
+            }
+            else if (_isOnSlope)
+            {
+                if (InputX == 0)
+                {
+                    stateMachine.ChangeState(player.SlopeIdleState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(player.SlopeMoveState);
+                }
             }
         }
 
@@ -56,6 +69,8 @@ namespace PlayerController.PlayerStates.SuperStates
             base.DoChecks();
 
             _isGrounded = player.CheckIfGrounded();
+            player.CheckSlope();
+            _isOnSlope = player.IsOnSlope;
         }
     }
 }

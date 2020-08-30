@@ -2,33 +2,33 @@
 using PlayerController.Data;
 using PlayerController.FSM;
 using PlayerController.PlayerStates.SuperStates;
+using UnityEngine;
 
 namespace PlayerController.PlayerStates.SubStates
 {
-    public class Player_MoveState : Player_GroundedState
+    public class Player_SlopeIdleState : Player_OnSlopeState
     {
-        public Player_MoveState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
+        public Player_SlopeIdleState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
+
+            player.Rb.sharedMaterial = PlayerData.fullFrictionMat;
+            
+            player.SetVelocityX(0f);
+            player.SetVelocityY(0f);
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
-            if (isExitingState) return;
             
-            player.CheckIfShouldFlip(InputX);
-            
-            player.SetVelocityX(InputX * PlayerData.movementSpeed);
-            
-            if (InputX == 0)
+            if (InputX != 0 && !isExitingState)
             {
-                stateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.SlopeMoveState);
             }
         }
 
@@ -40,6 +40,8 @@ namespace PlayerController.PlayerStates.SubStates
         public override void Exit()
         {
             base.Exit();
+            
+            player.Rb.sharedMaterial = PlayerData.noFrictionMat;
         }
 
         public override void DoChecks()

@@ -5,9 +5,9 @@ using PlayerController.PlayerStates.SuperStates;
 
 namespace PlayerController.PlayerStates.SubStates
 {
-    public class Player_MoveState : Player_GroundedState
+    public class Player_SlopeMoveState : Player_OnSlopeState
     {
-        public Player_MoveState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
+        public Player_SlopeMoveState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
         }
 
@@ -24,11 +24,11 @@ namespace PlayerController.PlayerStates.SubStates
             
             player.CheckIfShouldFlip(InputX);
             
-            player.SetVelocityX(InputX * PlayerData.movementSpeed);
+            player.SetVelocity(PlayerData.movementSpeed, player.SlopeDirection * player.FacingDirection, 1);
             
             if (InputX == 0)
             {
-                stateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.SlopeIdleState);
             }
         }
 
