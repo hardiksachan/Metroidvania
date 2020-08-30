@@ -21,20 +21,8 @@ namespace PlayerController.PlayerStates.SubStates
             
             player.CheckIfShouldFlip(InputX);
             
-            if (!isOnSlope)
-            {
-                player.SetVelocityX(InputX * PlayerData.movementSpeed);
-            }
-            else
-            {
-                slopeDir.Normalize();
-                slopeDir *= player.FacingDirection;
-                // player.SetVelocityX(InputX * PlayerData.movementSpeed * slopeDir.x);
-                // if(!isExitingState)
-                //     player.SetVelocityY(InputX * PlayerData.movementSpeed * slopeDir.y);
-                player.SetVelocity(PlayerData.movementSpeed, slopeDir, InputX);
-            }
-
+            player.SetVelocityX(InputX * PlayerData.movementSpeed);
+            
             if (InputX == 0 && !isExitingState)
             {
                 stateMachine.ChangeState(player.IdleState);

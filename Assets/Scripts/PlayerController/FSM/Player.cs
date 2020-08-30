@@ -76,7 +76,6 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
-        CheckSlope();
     }
 
     #endregion
@@ -93,14 +92,6 @@ public class Player : MonoBehaviour
     public void SetVelocityY(float velocity)
     {
         _workspace.Set(CurrentVelocity.x, velocity);
-        Rb.velocity = _workspace;
-        CurrentVelocity = _workspace;
-    }
-    
-    public void SetVelocity(float velocity, Vector2 angle, int direction)
-    {
-        angle.Normalize();
-        _workspace.Set(angle.x * velocity * direction, angle.y * velocity);
         Rb.velocity = _workspace;
         CurrentVelocity = _workspace;
     }
@@ -140,23 +131,6 @@ public class Player : MonoBehaviour
         {
             Flip();
         }
-    }
-
-    public Vector2 CheckSlope()
-    {
-        var hit = Physics2D.Raycast(groundCheck.position, Vector2.down, playerData.slopeCheckDistance,
-            playerData.whatIsGround);
-        if (hit)
-        {
-            var slope = Vector2.Perpendicular(hit.normal) * (FacingDirection * -1);
-            
-            Debug.DrawRay(hit.point, hit.normal, Color.red);
-            Debug.DrawRay(hit.point, slope, Color.green);
-
-            return slope;
-        }
-
-        return Vector2.zero;
     }
     #endregion
 }

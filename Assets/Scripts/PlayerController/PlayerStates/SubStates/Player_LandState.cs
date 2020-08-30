@@ -11,26 +11,6 @@ namespace PlayerController.PlayerStates.SubStates
         {
         }
 
-        public override void Enter()
-        {
-            base.Enter();
-            
-            if (isOnSlope) {
-                player.Rb.sharedMaterial = PlayerData.fullFrictionMat;
-            }
-        }
-        
-
-        public override void Exit()
-        {
-            base.Exit();
-
-            if (player.Rb.sharedMaterial.friction > 10f)
-            {
-                player.Rb.sharedMaterial = PlayerData.noFrictionMat;
-            }
-        }
-
         public override void LogicUpdate()
         {
             base.LogicUpdate();
