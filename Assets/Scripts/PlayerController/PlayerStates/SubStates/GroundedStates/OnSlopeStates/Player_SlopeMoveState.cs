@@ -3,7 +3,7 @@ using PlayerController.Data;
 using PlayerController.FSM;
 using PlayerController.PlayerStates.SuperStates;
 
-namespace PlayerController.PlayerStates.SubStates
+namespace PlayerController.PlayerStates.SubStates.GroundedStates.OnSlopeStates
 {
     public class Player_SlopeMoveState : Player_OnSlopeState
     {

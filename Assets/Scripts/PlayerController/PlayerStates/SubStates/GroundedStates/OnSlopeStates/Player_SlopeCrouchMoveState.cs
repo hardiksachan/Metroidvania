@@ -4,40 +4,46 @@ using PlayerController.FSM;
 using PlayerController.PlayerStates.SuperStates;
 using UnityEngine;
 
-namespace PlayerController.PlayerStates.SubStates
+namespace PlayerController.PlayerStates.SubStates.GroundedStates.OnSlopeStates
 {
-    public class Player_CrouchIdleState : Player_GroundedState
+    public class Player_SlopeCrouchMoveState : Player_OnSlopeState
     {
+        public Player_SlopeCrouchMoveState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
+        {
+        }
+
         public override void Enter()
         {
             base.Enter();
-            player.SetVelocityX(0f);
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
+            
             if (isExitingState) return;
-
+            
+            player.CheckIfShouldFlip(InputX);
+            
+            player.SetVelocity(PlayerData.crouchMovementSpeed, player.SlopeDirection * player.FacingDirection, 1);
 
             if (CrouchInput)
             {
-                if (InputX != 0)
+                if (InputX == 0)
                 {
-                    stateMachine.ChangeState(player.CrouchMoveState);
+                    stateMachine.ChangeState(player.SlopeCrouchIdleState);
                 }
             }
             else
             {
                 player.SetColliderScale(false);
-                if (InputX != 0)
+                if (InputX == 0)
                 {
-                    stateMachine.ChangeState(player.MoveState);
+                    stateMachine.ChangeState(player.SlopeIdleState);
                 }
                 else
                 {
-                    stateMachine.ChangeState(player.IdleState);
+                    stateMachine.ChangeState(player.SlopeMoveState);
                 }
             }
         }
@@ -55,11 +61,6 @@ namespace PlayerController.PlayerStates.SubStates
         public override void DoChecks()
         {
             base.DoChecks();
-        }
-
-        public Player_CrouchIdleState(StateMachine stateMachine, string animBoolName, Player player,
-            PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
-        {
         }
     }
 }

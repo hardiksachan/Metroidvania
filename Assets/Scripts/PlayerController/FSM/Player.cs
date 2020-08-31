@@ -2,6 +2,8 @@
 using PlayerController.Data;
 using PlayerController.Input;
 using PlayerController.PlayerStates.SubStates;
+using PlayerController.PlayerStates.SubStates.GroundedStates;
+using PlayerController.PlayerStates.SubStates.GroundedStates.OnSlopeStates;
 using UnityEngine;
 
 namespace PlayerController.FSM
@@ -18,6 +20,8 @@ namespace PlayerController.FSM
         public Player_CrouchMoveState CrouchMoveState { get; private set; }
         public Player_SlopeIdleState SlopeIdleState { get; private set; }
         public Player_SlopeMoveState SlopeMoveState { get; private set; }
+        public Player_SlopeCrouchIdleState SlopeCrouchIdleState { get; private set; }
+        public Player_SlopeCrouchMoveState SlopeCrouchMoveState { get; private set; }
         public Player_JumpState JumpState { get; private set; }
         public Player_InAirState InAirState { get; private set; }
         public Player_LandState LandState { get; private set; }
@@ -75,6 +79,8 @@ namespace PlayerController.FSM
             CrouchMoveState = new Player_CrouchMoveState(StateMachine, "crouchMove", this, playerData);
             SlopeIdleState = new Player_SlopeIdleState(StateMachine, "idle", this, playerData);
             SlopeMoveState = new Player_SlopeMoveState(StateMachine, "move", this, playerData);
+            SlopeCrouchIdleState = new Player_SlopeCrouchIdleState(StateMachine, "crouchIdle", this, playerData);
+            SlopeCrouchMoveState = new Player_SlopeCrouchMoveState(StateMachine, "crouchMove", this, playerData);
             JumpState = new Player_JumpState(StateMachine, "inAir", this, playerData);
             InAirState = new Player_InAirState(StateMachine, "inAir", this, playerData);
             LandState = new Player_LandState(StateMachine, "land", this, playerData);

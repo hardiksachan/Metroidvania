@@ -3,14 +3,10 @@ using PlayerController.Data;
 using PlayerController.FSM;
 using PlayerController.PlayerStates.SuperStates;
 
-namespace PlayerController.PlayerStates.SubStates
+namespace PlayerController.PlayerStates.SubStates.GroundedStates
 {
-    public class Player_IdleState : Player_GroundedState
+    public class Player_CrouchIdleState : Player_GroundedState
     {
-        public Player_IdleState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
-        {
-        }
-
         public override void Enter()
         {
             base.Enter();
@@ -20,25 +16,27 @@ namespace PlayerController.PlayerStates.SubStates
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+
             if (isExitingState) return;
+
 
             if (CrouchInput)
             {
-                player.SetColliderScale(true);
-                if (InputX == 0)
-                {
-                    stateMachine.ChangeState(player.CrouchIdleState);
-                }
-                else
+                if (InputX != 0)
                 {
                     stateMachine.ChangeState(player.CrouchMoveState);
                 }
             }
             else
             {
+                player.SetColliderScale(false);
                 if (InputX != 0)
                 {
                     stateMachine.ChangeState(player.MoveState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(player.IdleState);
                 }
             }
         }
@@ -56,6 +54,11 @@ namespace PlayerController.PlayerStates.SubStates
         public override void DoChecks()
         {
             base.DoChecks();
+        }
+
+        public Player_CrouchIdleState(StateMachine stateMachine, string animBoolName, Player player,
+            PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
+        {
         }
     }
 }

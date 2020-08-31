@@ -38,7 +38,7 @@ namespace PlayerController.PlayerStates.SuperStates
             if (_jumpInput && player.JumpState.CanJump())
             {
                 stateMachine.ChangeState(player.JumpState);
-            } 
+            }
             else if (!_isGrounded)
             {
                 player.InAirState.StartCoyoteTime();
@@ -46,13 +46,29 @@ namespace PlayerController.PlayerStates.SuperStates
             }
             else if (_isOnSlope)
             {
-                if (InputX == 0)
+                if (CrouchInput)
                 {
-                    stateMachine.ChangeState(player.SlopeIdleState);
+                    player.SetColliderScale(true);
+                    if (InputX == 0 && stateMachine.CurrentState != player.SlopeCrouchIdleState)
+                    {
+                        stateMachine.ChangeState(player.SlopeCrouchIdleState);
+                    }
+                    else if (InputX != 0 && stateMachine.CurrentState != player.SlopeCrouchMoveState)
+                    {
+                        stateMachine.ChangeState(player.SlopeCrouchMoveState);
+                    }
                 }
                 else
                 {
-                    stateMachine.ChangeState(player.SlopeMoveState);
+                    player.SetColliderScale(false);
+                    if (InputX == 0 && stateMachine.CurrentState != player.SlopeIdleState)
+                    {
+                        stateMachine.ChangeState(player.SlopeIdleState);
+                    }
+                    else if (InputX != 0 && stateMachine.CurrentState != player.SlopeMoveState)
+                    {
+                        stateMachine.ChangeState(player.SlopeMoveState);
+                    }
                 }
             }
         }

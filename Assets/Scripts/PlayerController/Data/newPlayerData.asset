@@ -20,6 +20,8 @@ MonoBehaviour:
   slopeCheckDistance: 1.6
   noFrictionMat: {fileID: 6200000, guid: eb3e40deb5cfee94c872a5f544c11d97, type: 2}
   fullFrictionMat: {fileID: 6200000, guid: ca4ded58919b6b44a989ef3ab498faaa, type: 2}
+  crouchMovementSpeed: 8
+  crouchColliderScale: 0.6
   variableJumpHeightMultiplier: 0.5
   amountOfJumps: 2
   jumpVelocity: 25
