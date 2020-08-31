@@ -129,7 +129,7 @@ namespace PlayerController.FSM
             Rb.velocity = _workspace;
             CurrentVelocity = _workspace;
         }
-        
+
         public void SetVelocity(float velocity, Vector2 angle, int direction)
         {
             angle.Normalize();
@@ -143,11 +143,12 @@ namespace PlayerController.FSM
             if (crouched)
             {
                 var size = new Vector2();
-                size.Set(_colliderInitialSize.x, _colliderInitialSize.y*playerData.crouchColliderScale);
+                size.Set(_colliderInitialSize.x, _colliderInitialSize.y * playerData.crouchColliderScale);
                 Collider.size = size;
-                
+
                 var offset = new Vector2();
-                offset.Set(_colliderInitialOffset.x, _colliderInitialOffset.y-((_colliderInitialSize.y - size.y)/2));
+                offset.Set(_colliderInitialOffset.x,
+                    _colliderInitialOffset.y - ((_colliderInitialSize.y - size.y) / 2));
                 Collider.offset = offset;
             }
             else
@@ -156,7 +157,6 @@ namespace PlayerController.FSM
                 Collider.offset = _colliderInitialOffset;
             }
         }
-
 
         #endregion
 
@@ -186,7 +186,9 @@ namespace PlayerController.FSM
 
         public bool CheckIfGrounded()
         {
-            return Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
+            //return Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
+            return Physics2D.Raycast(groundCheck.position, -transform.up, playerData.groundCheckRadius,
+                playerData.whatIsGround);
         }
 
         public void CheckIfShouldFlip(int xInput)
@@ -199,7 +201,8 @@ namespace PlayerController.FSM
 
         public void CheckSlope()
         {
-            Vector2 checkPos = transform.position - (Vector3) (new Vector2(0.0f, _colliderInitialSize.y / 2 * transform.localScale.y));
+            Vector2 checkPos = transform.position -
+                               (Vector3) (new Vector2(0.0f, _colliderInitialSize.y / 2 * transform.localScale.y));
 
             // Check Horizontal 
             RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, playerData.slopeCheckDistance,
@@ -246,7 +249,7 @@ namespace PlayerController.FSM
                 Debug.DrawRay(hit.point, SlopeDirection, Color.blue);
                 Debug.DrawRay(hit.point, hit.normal, Color.green);
             }
-            
+
             // TODO: slope max angle
         }
 
