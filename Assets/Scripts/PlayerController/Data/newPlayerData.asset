@@ -26,3 +26,5 @@ MonoBehaviour:
   amountOfJumps: 2
   jumpVelocity: 25
   coyoteTime: 0.05
+  wallCheckDistance: 1
+  wallSlideVelocity: 7

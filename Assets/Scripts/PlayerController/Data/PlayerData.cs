@@ -23,5 +23,9 @@ namespace PlayerController.Data
         public int amountOfJumps = 1;
         public float jumpVelocity = 15f;
         public float coyoteTime = .1f;
+
+        [Header("Wall State")]
+        public float wallCheckDistance = .5f;
+        public float wallSlideVelocity;
     }
 }

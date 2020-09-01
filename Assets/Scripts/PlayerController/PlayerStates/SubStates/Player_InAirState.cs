@@ -15,6 +15,7 @@ namespace PlayerController.PlayerStates.SubStates
         private bool _isJumping;
         private bool _isGrounded;
         private bool _coyoteTime;
+        private bool _isTouchingWall;
 
         public Player_InAirState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
@@ -45,6 +46,9 @@ namespace PlayerController.PlayerStates.SubStates
             else if (_jumpInput && player.JumpState.CanJump())
             {
                 stateMachine.ChangeState(player.JumpState);
+            } else if (_isTouchingWall && _inputX == player.FacingDirection && player.CurrentVelocity.y <= 0f)
+            {
+                stateMachine.ChangeState(player.WallSlideState);
             }
             else
             {
@@ -97,6 +101,7 @@ namespace PlayerController.PlayerStates.SubStates
             base.DoChecks();
 
             _isGrounded = player.CheckIfGrounded();
+            _isTouchingWall = player.CheckIfTouchingWall();
         }
 
         public void SetIsJumping() => _isJumping = true;

@@ -4,6 +4,7 @@ using PlayerController.Input;
 using PlayerController.PlayerStates.SubStates;
 using PlayerController.PlayerStates.SubStates.GroundedStates;
 using PlayerController.PlayerStates.SubStates.GroundedStates.OnSlopeStates;
+using PlayerController.PlayerStates.SubStates.TouchingWall;
 using UnityEngine;
 
 namespace PlayerController.FSM
@@ -25,6 +26,10 @@ namespace PlayerController.FSM
         public Player_JumpState JumpState { get; private set; }
         public Player_InAirState InAirState { get; private set; }
         public Player_LandState LandState { get; private set; }
+        public Player_WallSlideState WallSlideState { get; private set; }
+        public Player_WallGrabState WallGrabState { get; private set; }
+        public Player_WallClimbState WallClimbState { get; private set; }
+        
 
         [SerializeField] private PlayerData playerData;
 
@@ -42,6 +47,7 @@ namespace PlayerController.FSM
         #region Transforms
 
         [SerializeField] private Transform groundCheck;
+        [SerializeField] private Transform wallCheck;
 
         #endregion
 
@@ -84,6 +90,9 @@ namespace PlayerController.FSM
             JumpState = new Player_JumpState(StateMachine, "inAir", this, playerData);
             InAirState = new Player_InAirState(StateMachine, "inAir", this, playerData);
             LandState = new Player_LandState(StateMachine, "land", this, playerData);
+            WallClimbState = new Player_WallClimbState(StateMachine, "wallClimb", this, playerData);
+            WallGrabState = new Player_WallGrabState(StateMachine, "wallGrab", this, playerData);
+            WallSlideState = new Player_WallSlideState(StateMachine, "wallSlide", this, playerData);
         }
 
         void Start()
@@ -188,6 +197,12 @@ namespace PlayerController.FSM
         {
             //return Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
             return Physics2D.Raycast(groundCheck.position, -transform.up, playerData.groundCheckRadius,
+                playerData.whatIsGround);
+        }
+
+        public bool CheckIfTouchingWall()
+        {
+            return Physics2D.Raycast(wallCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance,
                 playerData.whatIsGround);
         }
 
