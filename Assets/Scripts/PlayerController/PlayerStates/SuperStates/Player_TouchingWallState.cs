@@ -8,8 +8,10 @@ namespace PlayerController.PlayerStates.SuperStates
     {
         protected bool IsGrounded;
         protected bool IsTouchingWall;
+        protected bool GrabInput;
         
         protected int InputX;
+        protected int InputY;
         
         public Player_TouchingWallState(StateMachine stateMachine, string animBoolName, Player player, PlayerData playerData) : base(stateMachine, animBoolName, player, playerData)
         {
@@ -25,11 +27,14 @@ namespace PlayerController.PlayerStates.SuperStates
             base.LogicUpdate();
 
             InputX = player.InputHandler.NormInputX;
+            InputY = player.InputHandler.NormInputY;
+            GrabInput = player.InputHandler.GrabInput;
 
-            if (IsGrounded)
+            if (IsGrounded && !GrabInput)
             {
                 stateMachine.ChangeState(player.IdleState);
-            } else if (!IsTouchingWall || InputX != player.FacingDirection)
+            } 
+            else if (!IsTouchingWall || (InputX != player.FacingDirection && !GrabInput))
             {
                 stateMachine.ChangeState(player.InAirState);
             }

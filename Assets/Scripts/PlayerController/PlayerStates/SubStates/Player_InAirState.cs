@@ -12,6 +12,7 @@ namespace PlayerController.PlayerStates.SubStates
 
         private bool _jumpInput;
         private bool _jumpInputStop;
+        private bool _grabInput;
         private bool _isJumping;
         private bool _isGrounded;
         private bool _coyoteTime;
@@ -36,6 +37,7 @@ namespace PlayerController.PlayerStates.SubStates
             _inputX = player.InputHandler.NormInputX;
             _jumpInput = player.InputHandler.JumpInput;
             _jumpInputStop = player.InputHandler.JumpInputStop;
+            _grabInput = player.InputHandler.GrabInput;
 
             CheckJumpMultiplier();
 
@@ -46,7 +48,12 @@ namespace PlayerController.PlayerStates.SubStates
             else if (_jumpInput && player.JumpState.CanJump())
             {
                 stateMachine.ChangeState(player.JumpState);
-            } else if (_isTouchingWall && _inputX == player.FacingDirection && player.CurrentVelocity.y <= 0f)
+            }
+            else if (_isTouchingWall && _grabInput)
+            {
+                stateMachine.ChangeState(player.WallGrabState);
+            }
+            else if (_isTouchingWall && _inputX == player.FacingDirection && player.CurrentVelocity.y <= 0f)
             {
                 stateMachine.ChangeState(player.WallSlideState);
             }

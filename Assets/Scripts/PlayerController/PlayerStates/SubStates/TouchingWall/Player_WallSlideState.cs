@@ -21,6 +21,11 @@ namespace PlayerController.PlayerStates.SubStates.TouchingWall
             base.LogicUpdate();
             
             player.SetVelocityY(-PlayerData.wallSlideVelocity);
+
+            if (GrabInput && InputY == 0)
+            {
+                stateMachine.ChangeState(player.WallGrabState);
+            }
         }
 
         public override void PhysicsUpdate()

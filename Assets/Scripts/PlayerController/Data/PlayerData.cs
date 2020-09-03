@@ -26,6 +26,8 @@ namespace PlayerController.Data
 
         [Header("Wall State")]
         public float wallCheckDistance = .5f;
-        public float wallSlideVelocity;
+        public float wallSlideVelocity = 7f;
+        public float wallClimbVelocity = 7f;
+        
     }
 }

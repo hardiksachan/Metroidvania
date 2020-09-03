@@ -33,6 +33,7 @@ namespace PlayerController.PlayerStates.SuperStates
 
             InputX = player.InputHandler.NormInputX;
             _jumpInput = player.InputHandler.JumpInput;
+            _grabInput = player.InputHandler.GrabInput;
             CrouchInput = player.InputHandler.CrouchInput;
 
             if (_jumpInput && player.JumpState.CanJump())
@@ -43,6 +44,10 @@ namespace PlayerController.PlayerStates.SuperStates
             {
                 player.InAirState.StartCoyoteTime();
                 stateMachine.ChangeState(player.InAirState);
+            }
+            else if (_isTouchingWall && _grabInput)
+            {
+                stateMachine.ChangeState(player.WallGrabState);
             }
             else if (_isOnSlope)
             {
@@ -90,6 +95,7 @@ namespace PlayerController.PlayerStates.SuperStates
             _isGrounded = player.CheckIfGrounded();
             player.CheckSlope();
             _isOnSlope = player.IsOnSlope;
+            _isTouchingWall = player.CheckIfTouchingWall();
         }
     }
 }
